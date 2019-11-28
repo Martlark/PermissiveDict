@@ -99,7 +99,7 @@ class TestDict(unittest.TestCase):
     def test_get_raw_number(self):
         self.assertTrue(self.int_key in self.pd)
         self.assertTrue(self.float_key in self.pd)
-        self.assertFalse(self.float_value*random_float() in self.pd)
+        self.assertFalse(self.float_value * random_float() in self.pd)
         self.assertEqual(self.pd.get(str(self.float_key)), self.float_value)
 
     def test_get_number(self):
@@ -117,15 +117,31 @@ class TestDict(unittest.TestCase):
         self.assertEqual(self.pd['good,bad,4'], self.pd.get(4))
         self.assertEqual(self.pd['4,a,a_b,good,bad,4'], self.pd.get(4))
         self.assertEqual(self.pd['a_b,good,bad,4'], self.pd.a_b)
-        self.assertEqual(self.pd['a.b,good,bad,4'], self.pd.a_b)
+        self.assertEqual(self.pd['A.b,good,bad,4'], self.pd.a_b)
         self.assertEqual(self.pd['a-b,good,bad,4'], self.pd.a_b)
-        self.assertEqual(self.pd['a b,good,bad,4'], self.pd.a_b)
+        self.assertEqual(self.pd['a B,good,bad,4'], self.pd.a_b)
+        self.assertEqual(self.pd['ayb,good,bad,45'], '')
+
+    def test_default(self):
+        self.assertEqual(self.pd.no_exists, '')
+        self.assertEqual(self.pd.get('no_exists', 'flong'), 'flong')
+
+    def test_all(self):
+        d = PermissiveDict({'A': 1, 'a': 22, 'A B': 2, 'b': 3, 4: 4, 'lab': 'woof!'})
+        self.assertEqual({1, 22, 4}, set(d.all('a,4,8')))
+        self.assertEqual({'a', 'A', 4, 'A B'}, set(d.all('a,4,a-b', keys=True)))
+        self.assertEqual({1, 22}, set(d.all('a')))
+        self.assertEqual({'a', 'A'}, set(d.all('a', keys=True)))
+        self.assertEqual([], d.all('and,400'))
 
     def test_convert_list(self):
-        dicts = [{k: str(k)} for k in range(10)]
+        test_length = 20
+        dicts = [{k: str(k)} for k in range(test_length)]
 
         p_dicts = PermissiveDict.convert_list(dicts)
         self.assertEqual(len(dicts), len(p_dicts))
 
-        self.assertEqual(dicts[1][1], '1')
-        self.assertEqual(p_dicts[1][1], '1')
+        for z in range(test_length):
+            self.assertEqual(dicts[z][z], p_dicts[z][z])
+            self.assertEqual(dicts[z][z], p_dicts[z].get(z))
+            self.assertEqual(dicts[z][z], p_dicts[z](z))

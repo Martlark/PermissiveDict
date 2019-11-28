@@ -83,8 +83,29 @@ class PermissiveDict(dict):
                             # print(f'iterated: {requested_key}')
                             return v
 
-
         return self.__get_map_value__(key, default)
+
+    def all(self, key, keys=False):
+        """
+        return all values (or keys) that match the key(s) given
+
+        :param key: {any} the key to search for
+        :param keys: {bool} True to return keys instead of values
+        :return: {list} all the items found
+        """
+        results = []
+        for k, v in self.items():
+            for requested_key in [r.upper().strip() for r in str(key).split(self.__split_char) if len(r) > 0]:
+                if len(requested_key) > 0:
+                    for r in self.__key_wildcards:
+                        match_key = str(k).replace(*r).upper().strip()
+                        if match_key == requested_key:
+                            if keys:
+                                results.append(k)
+                            else:
+                                results.append(v)
+                            break
+        return results
 
     @classmethod
     def convert_list(cls, items):
@@ -109,7 +130,7 @@ class PermissiveDict(dict):
     def set_map(self, map_fields):
         self.__map_fields = map_fields
 
-    def __get_map_value__(self, key, default=''):
+    def __get_map_value__(self, key, default):
         """
         return value using map keys to map multiple keys to a tight requested_key
         example:

@@ -128,10 +128,13 @@ class TestDict(unittest.TestCase):
 
     def test_all(self):
         d = PermissiveDict({'A': 1, 'a': 22, 'A B': 2, 'b': 3, 4: 4, 'lab': 'woof!'})
+        # three key values
         self.assertEqual({1, 22, 4}, set(d.all('a,4,8')))
         self.assertEqual({'a', 'A', 4, 'A B'}, set(d.all('a,4,a-b', keys=True)))
+        # upper and lower case a
         self.assertEqual({1, 22}, set(d.all('a')))
         self.assertEqual({'a', 'A'}, set(d.all('a', keys=True)))
+        # nothing
         self.assertEqual([], d.all('and,400'))
 
     def test_convert_list(self):

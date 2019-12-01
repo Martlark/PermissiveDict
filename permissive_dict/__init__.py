@@ -23,13 +23,17 @@ class PermissiveDict(dict):
     Items with multiple wildcard keys may return the first item found.
 
     """
-    __key_wildcards = [('', ''), ('_', ' '), (' ', '_'), (' ', '-'), ('-', ' '), (' ', '.'), ('.', ' ')]
-    __split_char = ','
+    __key_wildcards__ = [('', ''), ('_', ' '), (' ', '_'), (' ', '-'), ('-', ' '), (' ', '.'), ('.', ' ')]
+    __split_char__ = ','
 
-    def __init__(self, kwargs):
-        self.__map_fields = {}
-        self.__default_returned = False
-        super().__init__(kwargs)
+    def __init__(self, d=None, **kwargs):
+        self.__default_returned__ = False
+        self.__map_fields__ = {}
+        if d is None:
+            d = {}
+        if kwargs:
+            d.update(**kwargs)
+        super().__init__(d)
 
     def __call__(self, key):
         return self.get(key)
@@ -48,9 +52,15 @@ class PermissiveDict(dict):
         except KeyError:
             return self.get(name)
 
+    def __setattr__(self, key, value):
+        if key.startswith('__'):
+            super().__setattr__(key, value)
+        else:
+            super().update({key: value})
+
     def __contains__(self, item):
         self.get(item)
-        return not self.__default_returned
+        return not self.__default_returned__
 
     def get(self, key, default=''):
         """
@@ -64,14 +74,14 @@ class PermissiveDict(dict):
         :param default: default value if not found.  NOTE: unlike Python uses '' as the default
         :return: the value found or default if not found
         """
-        self.__default_returned = False
+        self.__default_returned__ = False
         value = super().get(key)
         if value:
             return value
 
-        for requested_key in [r.upper().strip() for r in str(key).split(self.__split_char) if len(r) > 0]:
+        for requested_key in [r.upper().strip() for r in str(key).split(self.__split_char__) if len(r) > 0]:
             if len(requested_key) > 0:
-                for r in self.__key_wildcards:
+                for r in self.__key_wildcards__:
                     value = super().get(requested_key.replace(*r))
                     if value:
                         # print(f'short cut: {requested_key}')
@@ -95,9 +105,9 @@ class PermissiveDict(dict):
         """
         results = []
         for k, v in self.items():
-            for requested_key in [r.upper().strip() for r in str(key).split(self.__split_char) if len(r) > 0]:
+            for requested_key in [r.upper().strip() for r in str(key).split(self.__split_char__) if len(r) > 0]:
                 if len(requested_key) > 0:
-                    for r in self.__key_wildcards:
+                    for r in self.__key_wildcards__:
                         match_key = str(k).replace(*r).upper().strip()
                         if match_key == requested_key:
                             if keys:
@@ -128,7 +138,7 @@ class PermissiveDict(dict):
         return result
 
     def set_map(self, map_fields):
-        self.__map_fields = map_fields
+        self.__map_fields__ = map_fields
 
     def __get_map_value__(self, key, default):
         """
@@ -141,9 +151,9 @@ class PermissiveDict(dict):
         :param key: item to match
         :return: the value
         """
-        map_keys = self.__map_fields.get(key)
+        map_keys = self.__map_fields__.get(key)
         if not map_keys:
-            self.__default_returned = True
+            self.__default_returned__ = True
             return default
 
         for k in map_keys:
@@ -151,5 +161,5 @@ class PermissiveDict(dict):
             if value:
                 return value
 
-        self.__default_returned = True
+        self.__default_returned__ = True
         return default

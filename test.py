@@ -47,6 +47,19 @@ class TestDict(unittest.TestCase):
                             self.float_key: self.float_value}
         self.pd = PermissiveDict(self.normal_dict)
 
+    def test_setattr(self):
+        test_value = random_float()
+        d = PermissiveDict()
+        d.a = test_value
+        self.assertEqual(test_value, d.a)
+        self.assertEqual(test_value, d.A)
+
+    def test_kwargs(self):
+        d = PermissiveDict(a=1, b=2, c=3)
+        self.assertEqual(1, d.a)
+        self.assertEqual(2, d.B)
+        self.assertEqual(3, d["q,C"])
+
     def test_convert_dict(self):
         self.assertEqual(self.normal_dict, self.pd)
         self.assertFalse(self.normal_dict.get('a'))

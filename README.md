@@ -18,9 +18,13 @@ Rules:
 6. Default of '' is used instead of dict standard None or raising KeyError
 7. Multiple keys can be supplied separated with , (comma)
         
-        Example:
-        a = permissive_dict({'A': 1, 'A B': 2, 'b': 3, 4: 4})
-        a.get('A_b') == a['a_b'] == a['A b'] == a['A_B'] a['a-b '] == a.a_b == a.A_b == a('a-b')
+Example:
+--------
+        
+        from permissive_dict import PermissiveDict
+        
+        a = PermissiveDict({'A B': 2, 4: 4})
+        a.get('A_b') == a['a_b'] == a['A b'] == a['A_B'] == a['a-b '] == a['a.b '] == a.a_b == a.A_b == a('a-b')
         
         a.get('blue,4') == 4
         

@@ -11,7 +11,7 @@ Rules:
 ------
 
 1. Keys compared without regard to case.
-2. Spaces, underscores, full-stops and dashes are equivalent in a requested_key.
+2. Spaces, underscores, full-stops and dashes are equivalent in a requested key.
 3. Requested key is converted to str and stripped for wild card searching.
 4. Items in the list can be retrieved by, get, attribute_access, call or array requested_key.
 5. First matching element is returned.

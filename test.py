@@ -47,6 +47,14 @@ class TestDict(unittest.TestCase):
                             self.float_key: self.float_value}
         self.pd = PermissiveDict(self.normal_dict)
 
+    def test_del(self):
+        test_value = random_string()
+        d = PermissiveDict(a=test_value)
+        self.assertEqual(test_value, d.a)
+        del d['a']
+        self.assertFalse('a' in d)
+        self.assertEqual('', d.a)
+
     def test_setattr(self):
         test_value = random_float()
         d = PermissiveDict()

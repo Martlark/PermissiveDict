@@ -7,8 +7,8 @@ Note: may resort to iterating the dict values to find the matching requested key
 
 Key is first directly found using the exact key, and then loose rules are used.
 
-Rules:
-------
+Key Search Rules:
+-----------------
 
 1. Keys compared without regard to case.
 2. Spaces, underscores, full-stops and dashes are equivalent in a requested key.
@@ -31,3 +31,14 @@ Example:
         a.get('4') == a[4] == a(4) == a('4')
 
 Items with multiple wildcard keys matching in the dictionary will return the first item found.
+
+Keys can be accessed as attributes, array index, get() or by calling the instance variable.
+
+Key and value can be set as an attribute.
+
+Example:
+--------
+
+    a = PermissiveDict({'A B': 2, 4: 4})
+    a.hello = 4
+    a.hello == a['hello'] == a('hello') == a.get('HellO')

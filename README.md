@@ -1,7 +1,7 @@
 # PermissiveDict
 
 Dictionary class with loose rules for returning an attribute or a requested key value.  
---------------------
+--------------------------------------------------------------------------------------
     
 Note: may resort to iterating the dict values to find the matching requested key, so is potentially slow.
 

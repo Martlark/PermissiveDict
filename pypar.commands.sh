@@ -19,5 +19,5 @@ pip install twine
 # on each release
 
 python setup.py sdist bdist_wheel
-twine check dist/permissive_dict-1.0.2*
-twine upload dist/permissive_dict-1.0.2* -u martlark
+twine check dist/permissive_dict-1.0.3*
+twine upload dist/permissive_dict-1.0.3* -u martlark

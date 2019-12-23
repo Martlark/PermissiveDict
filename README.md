@@ -7,6 +7,11 @@ Note: may resort to iterating the dict values to find the matching requested key
 
 Key is first directly found using the exact key, and then loose rules are used.
 
+Installing
+----------
+
+    pip install permissive-dict
+
 Key Search Rules:
 -----------------
 
@@ -19,7 +24,6 @@ Key Search Rules:
 7. Multiple keys can be supplied separated with , (comma)
         
 Example:
---------
         
         from permissive_dict import PermissiveDict
         
@@ -35,10 +39,27 @@ Items with multiple wildcard keys matching in the dictionary will return the fir
 Keys can be accessed as attributes, array index, get() or by calling the instance variable.
 
 Key and value can be set as an attribute.
+-----------------------------------------
 
 Example:
---------
 
-    a = PermissiveDict({'A B': 2, 4: 4})
+    a = PermissiveDict()
     a.hello = 4
     a.hello == a['hello'] == a('hello') == a.get('HellO')
+
+Converting an entire list of dicts
+----------------------------------
+
+An entire list of dictionaries can be converted to PermissiveDict using
+the `convert_list` method.  NOTE: no deep conversion is done and child 
+dictionaries are not converted.
+
+Example:
+
+    list_of_dicts = [dict(a=n) for n in range(10)]
+    permissive_list = PermissiveDict.convert_list(list_of_dicts)
+
+Notes
+-----
+
+Only Python 3 is supported.

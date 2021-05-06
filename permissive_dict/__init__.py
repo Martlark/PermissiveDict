@@ -1,3 +1,6 @@
+from itertools import permutations
+
+
 class PermissiveDict(dict):
     """
     Dictionary class with loose rules for returning an
@@ -23,7 +26,9 @@ class PermissiveDict(dict):
     Items with multiple wildcard keys may return the first item found.
 
     """
-    __key_wildcards__ = [('', ''), ('_', ' '), (' ', '_'), (' ', '-'), ('-', ' '), (' ', '.'), ('.', ' ')]
+
+    __key_wildcards__ = [('', '')]
+    __key_wildcards__ += permutations(['-', '_', ' ', '.'], 2)
     __split_char__ = ','
 
     def __init__(self, d=None, **kwargs):

@@ -83,10 +83,11 @@ class TestDict(unittest.TestCase):
         self.assertNotEqual(self.lab_value, self.pd.dog)
 
     def test_get(self):
-        old_d = {'A': 1, 'A B': 2, 'b': 3, 4: 4, 'lab': 'woof!'}
+        old_d = {'A': 1, 'A B': 2, 'b': 3, 4: 4, 'lab': 'woof!', 'hyphen-word': 'hyphen-word'}
         d = PermissiveDict(old_d)
+        assert d.get('hyphen-word') == d.hyphen_word
         assert d.get('a') == d.get('A') == 1
-        assert d.a_b == d.get('A_b') == 2
+        assert d.a_b == d.get('A_b') == d.get('A-b') == 2
         assert d.get('B') == 3
         assert d.a == d.A == 1
         assert d.q == ''

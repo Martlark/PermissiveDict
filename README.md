@@ -63,3 +63,7 @@ Notes
 -----
 
 Only Python 3 is supported.
+
+Release history
+---------------
+1.0.4 Fix missing handling of _ and -
